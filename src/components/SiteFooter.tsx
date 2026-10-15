@@ -39,10 +39,19 @@ export function SiteFooter() {
         <div>
           <h3 className="eyebrow text-gold">Studio</h3>
           <address className="mt-5 space-y-2 text-sm not-italic text-primary-foreground/75">
-            <p>Ranikhet Road, Almora</p>
-            <p>Uttarakhand 263601, India</p>
-            <p>hello@oakandpine.in</p>
-            <p>+91 98765 43210</p>
+            <p>Village Bissi, Bhirgukhal, Yamkeshwar</p>
+<p>Pauri Garhwal, Uttarakhand, India</p>
+<p>
+  <a href="mailto:workflowprashant08@gmail.com">
+    workflowprashant08@gmail.com
+  </a>
+</p>
+<p>
+  <a href="tel:+919027407902">
+    +91 9027407902
+  </a>
+</p>
+<p>By appointment · Online inquiries only</p>
           </address>
         </div>
       </div>
