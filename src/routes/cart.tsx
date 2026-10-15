@@ -1,150 +1,72 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-import { useCart } from "@/lib/cart";
-import { getProduct, formatINR } from "@/lib/products";
+
+const WHATSAPP_NUMBER = "919027407902";
 
 export const Route = createFileRoute("/cart")({
-  head: () => ({
-    meta: [
-      { title: "Your Cart — Oak & Pine" },
-      { name: "description", content: "Review your Oak & Pine mushroom order and checkout securely in INR." },
-      { property: "og:title", content: "Your Cart — Oak & Pine" },
-      { property: "og:description", content: "Review your organic mushroom order before checkout." },
-    ],
-  }),
-  component: CartPage,
+head: () => ({
+meta: [
+{ title: "Ordering Information — OAK AND PINE" },
+{
+name: "description",
+content:
+"OAK AND PINE is preparing its first mushroom collection. Contact us on WhatsApp for availability updates.",
+},
+],
+}),
+component: CartPage,
 });
 
 function CartPage() {
-  const { lines, setQty, remove, subtotal, shipping, total } = useCart();
+const message = encodeURIComponent(
+"Hello OAK AND PINE, I would like to know when fresh mushrooms and mushroom powder will be available."
+);
 
-  return (
-    <div className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
-      <Reveal>
-        <p className="eyebrow text-accent">Step 1 of 2</p>
-        <h1 className="mt-4 text-5xl sm:text-6xl">Your cart</h1>
-      </Reveal>
+const whatsappUrl = "https://wa.me/${WHATSAPP_NUMBER}?text=${message}";
 
-      {lines.length === 0 ? (
-        <Reveal>
-          <div className="mt-14 rounded-lg border border-border bg-card p-14 text-center shadow-soft">
-            <p className="font-display text-2xl">Your cart is still empty.</p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Three harvests are waiting in the shop.
-            </p>
-            <Link
-              to="/products"
-              className="mt-8 inline-flex rounded-full bg-primary px-9 py-4 text-xs tracking-[0.2em] uppercase text-primary-foreground transition-colors duration-500 hover:bg-accent"
-            >
-              Shop now
-            </Link>
-          </div>
-        </Reveal>
-      ) : (
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1.6fr_1fr]">
-          <ul className="space-y-6">
-            {lines.map((line) => {
-              const p = getProduct(line.id);
-              if (!p) return null;
-              return (
-                <li
-                  key={line.id}
-                  className="grid grid-cols-[88px_minmax(0,1fr)] gap-5 rounded-lg border border-border bg-card p-4 shadow-soft sm:grid-cols-[112px_minmax(0,1fr)_auto] sm:items-center sm:p-5"
-                >
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    loading="lazy"
-                    width={1024}
-                    height={1024}
-                    className="aspect-square w-full rounded-md object-cover"
-                  />
-                  <div className="min-w-0">
-                    <h2 className="truncate text-xl">{p.name}</h2>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{p.weight}</p>
-                    <p className="mt-2 text-sm">{formatINR(p.price)}</p>
+return (
+<div className="mx-auto max-w-4xl px-5 pt-16 sm:px-8 sm:pt-24">
+<Reveal>
+<p className="eyebrow text-accent">OAK AND PINE</p>
 
-                    <div className="mt-4 flex items-center gap-3 sm:hidden">
-                      <Stepper qty={line.qty} onChange={(n) => setQty(line.id, n)} />
-                      <button
-                        onClick={() => remove(line.id)}
-                        className="grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary"
-                        aria-label={`Remove ${p.name}`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
+    <h1 className="mt-4 text-5xl sm:text-6xl">
+      Ordering is coming soon
+    </h1>
 
-                  <div className="hidden items-center gap-4 sm:flex">
-                    <Stepper qty={line.qty} onChange={(n) => setQty(line.id, n)} />
-                    <span className="w-24 text-right text-sm tabular-nums">
-                      {formatINR(p.price * line.qty)}
-                    </span>
-                    <button
-                      onClick={() => remove(line.id)}
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary"
-                      aria-label={`Remove ${p.name}`}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+    <div className="mt-10 rounded-lg border border-border bg-card p-8 shadow-soft sm:p-12">
+      <p className="text-lg leading-8 text-muted-foreground">
+        We are preparing our mushroom collection. Online checkout and
+        payments are not available yet.
+      </p>
 
-          <aside className="h-fit rounded-lg border border-border bg-secondary/50 p-8 lg:sticky lg:top-28">
-            <h2 className="text-2xl">Summary</h2>
-            <dl className="mt-6 space-y-3 text-sm">
-              <div className="flex justify-between">
-                <dt className="text-muted-foreground">Subtotal</dt>
-                <dd className="tabular-nums">{formatINR(subtotal)}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="text-muted-foreground">Shipping</dt>
-                <dd className="tabular-nums">{shipping === 0 ? "Free" : formatINR(shipping)}</dd>
-              </div>
-              <div className="flex justify-between border-t border-border pt-4 font-display text-2xl">
-                <dt>Total</dt>
-                <dd className="tabular-nums">{formatINR(total)}</dd>
-              </div>
-            </dl>
-            <Link
-              to="/checkout"
-              className="mt-8 block rounded-full bg-primary px-8 py-4 text-center text-xs tracking-[0.2em] uppercase text-primary-foreground transition-colors duration-500 hover:bg-accent"
-            >
-              Proceed to Checkout
-            </Link>
-            <p className="mt-4 text-center text-xs text-muted-foreground">
-              Secure payments via UPI, cards, net banking &amp; wallets.
-            </p>
-          </aside>
-        </div>
-      )}
-    </div>
-  );
-}
+      <p className="mt-4 leading-7 text-muted-foreground">
+        Contact us on WhatsApp to ask about upcoming availability of fresh
+        mushrooms and mushroom powder. We will share availability and
+        pricing when confirmed.
+      </p>
 
-function Stepper({ qty, onChange }: { qty: number; onChange: (n: number) => void }) {
-  return (
-    <div className="flex shrink-0 items-center rounded-full border border-border bg-background">
-      <button
-        onClick={() => onChange(qty - 1)}
-        className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-secondary"
-        aria-label="Decrease quantity"
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-xs uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-accent"
       >
-        <Minus className="h-3.5 w-3.5" />
-      </button>
-      <span className="w-7 text-center text-sm tabular-nums">{qty}</span>
-      <button
-        onClick={() => onChange(qty + 1)}
-        className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-secondary"
-        aria-label="Increase quantity"
-      >
-        <Plus className="h-3.5 w-3.5" />
-      </button>
+        <MessageCircle className="h-4 w-4" />
+        Ask us on WhatsApp
+      </a>
+
+      <div>
+        <Link
+          to="/products"
+          className="mt-6 inline-block text-sm underline underline-offset-4"
+        >
+          Explore our planned products
+        </Link>
+      </div>
     </div>
-  );
+  </Reveal>
+</div>
+
+);
 }
