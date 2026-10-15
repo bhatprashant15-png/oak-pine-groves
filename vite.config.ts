@@ -1,4 +1,3 @@
-// @lovable.dev/vite-tanstack-config already includes the required plugins.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
@@ -11,4 +10,8 @@ export default defineConfig({
       crawlLinks: true,
     },
   },
+  vite: {
+    base: "/oak-pine-groves/",
+  },
 });
+
